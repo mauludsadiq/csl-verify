@@ -1,0 +1,38 @@
+name: csl-verify
+on:
+  push:
+  pull_request:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        ports: ['5432:5432']
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: csl_verify
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci || npm install
+      - run: echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/csl_verify" > .env
+      - run: npx prisma migrate deploy
+      - run: npm run build || true
+      - run: npm run dev & echo $! > .next_pid && sleep 7
+      - run: bash formal/scripts/setup-validator.sh
+      - run: echo "hello" > sample.txt
+      - run: curl -s -X POST http://localhost:3000/api/customers/register -H 'content-type: application/json' -d '{"email":"ci@csl.local"}' | tee /tmp/reg.json
+      - run: echo "API_KEY=$(jq -r .api_key /tmp/reg.json)" >> $GITHUB_ENV
+      - run: node --loader=ts-node/esm formal/tests/runtime-validator.ts
+        env:
+          API_KEY: ${{ env.API_KEY }}
+          CSL_BASE: http://localhost:3000
+      - run: kill $(cat .next_pid) || true
