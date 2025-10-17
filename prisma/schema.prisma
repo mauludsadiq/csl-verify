@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id                String        @id @default(cuid())
+  email             String        @unique
+  stripeCustomerId  String?       @unique
+  plan              Plan          @default(FREE)
+  apiKeys           ApiKey[]
+  requestsThisMonth Int           @default(0)
+  webhookUrl        String?
+  createdAt         DateTime      @default(now())
+  certificates      Certificate[]
+}
+
+model ApiKey {
+  id         String    @id @default(cuid())
+  key        String    @unique
+  customerId String
+  createdAt  DateTime  @default(now())
+  lastUsedAt DateTime?
+  revoked    Boolean   @default(false)
+  customer   Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+}
+
+model Certificate {
+  id            String    @id // certificate_id (H1)
+  originalHash  String
+  canonicalHash String
+  packedHash    String
+  fileName      String?
+  fileSize      Int?
+  customerId    String?
+  createdAt     DateTime  @default(now())
+  customer      Customer? @relation(fields: [customerId], references: [id])
+}
+
+enum Plan {
+  FREE
+  DEVELOPER
+  PROFESSIONAL
+  ENTERPRISE
+}

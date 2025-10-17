@@ -1,0 +1,52 @@
+{
+  "artifact_hashes": {
+    "certificate.pdf": {
+      "sha256": "7d23dac21309b5e711a652fe2b4b1803196895e160d78c08da2385e2e6923b12"
+    },
+    "registry.json": {
+      "sha256": "e045d6b04ce71c096b90aa381ec1585da956cffc258bb4162c494c428ae49522"
+    }
+  },
+  "certificate_id": "14c2a26148b15bcce8aed6615fbd37c974e492f8db5631371e16aa5178bf2776",
+  "certification_body": "CSL Verification Authority",
+  "compression": {
+    "algo": "zlib",
+    "bytes_after": 1544,
+    "bytes_before": 4190,
+    "ratio": 0.3684964200477327
+  },
+  "digital_signature": {
+    "files": {
+      "certificate.pdf.sig": "signatures/certificate.pdf.sig",
+      "registry.json.sig": "signatures/registry.json.sig"
+    },
+    "scheme": "ssh-ed25519",
+    "signer_fingerprint": "SHA256:ujqWqdbE524XCFoFTys3GTmAqxOiBEOgCa0Iw5KPtKs",
+    "status": "signed"
+  },
+  "issued_at": "2025-10-17 15:26:14 UTC",
+  "next_verification_due": "2028-10-17 15:26:14 UTC",
+  "reproducibility_confirmed": true,
+  "safety_classification": "IEC 62304 Class C / FDA 510(k)",
+  "stages": [
+    {
+      "bytes": 4190,
+      "name": "ORIGINAL",
+      "sha256": "14c2a26148b15bcce8aed6615fbd37c974e492f8db5631371e16aa5178bf2776"
+    },
+    {
+      "bytes": 4190,
+      "name": "CANON",
+      "sha256": "14c2a26148b15bcce8aed6615fbd37c974e492f8db5631371e16aa5178bf2776"
+    },
+    {
+      "bytes": 1544,
+      "name": "PACK(zlib)",
+      "sha256": "35582f3975966321803ff1188fcab03c049a4a64125268eab71294c28f1edc12"
+    }
+  ],
+  "subject": "Medical Device Software Module (Insulin Pump Controller)",
+  "validity_period_years": 3,
+  "verification_level": "Formal Methods + Cryptographic Integrity",
+  "version": "CSL-CERT/1.0"
+}
